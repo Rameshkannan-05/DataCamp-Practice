@@ -1,0 +1,24 @@
+from flask import Flask, jsonify
+import requests
+import pandas as pd
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello, World!"
+
+@app.route("/data")
+def get_data():
+    # Example: fetch JSON placeholder API
+    response = requests.get("https://jsonplaceholder.typicode.com/posts")
+    data = response.json()
+
+    # Convert to DataFrame for quick manipulation
+    df = pd.DataFrame(data)
+
+    # Return first 5 rows as JSON
+    return jsonify(df.head().to_dict(orient="records"))
+
+if __name__ == "__main__":
+    app.run(debug=True)
